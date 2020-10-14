@@ -12,14 +12,24 @@
  * @return {string}
  */
 var minWindow = function(s, t) {
-    // 指针，定位最小子串起始位置下标
-    let point = 0
+    // 左指针，定位最小子串起始位置下标
+    let left_point = 0
     // 临时字典
     let temp_map = new Map()
 
     for(let i=0; i<t.length; i++){
+        temp_map.set(t[i], 0)
+    }
+
+    for(let right_point=0; right_point<s.length; right_point++){
+        // 移动右指针，判断当前指针元素是否在目标字符内
+        if(temp_map.has(s[right_point])){
+            temp_map.set(s[right_point], right_point)
+        }
 
     }
+
+
 
 
 

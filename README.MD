@@ -315,7 +315,7 @@ let set4 = new Set([...set2.filter(item => !set1.has(item))])
 // 迭代
 for(let item of set1) console.log(item)
 for(let item of set1.keys()) console.log(item)
-for(let item of set1.values()) console.log(item)
+for(let item of set1.values()) console.log(item)f
 // keys()和values()方法是一样的
 for(let [key, value] of set1.entries()) console.log(key, value)
 
@@ -329,3 +329,83 @@ console.log(Array.from(set1))
 与集合类似，也是一种存储唯一值的数据结构，但是它以 **键值对** 的形式来存储
 
 `ES6` 中有字典，`Map`
+
+> 3. 无重复字符的最长子串
+
+给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。
+输入: "abcabcbb" 输出: 3 
+因为无重复字符的最长子串是 "abc"，所以其长度为 3。
+
+**思路：**
+
+*使用双指针滑动窗口剪切字符串*
+
+不断的移动右指针，遇到重复字符，就把左指针移动到重复字符的下一位
+
+在指针移动的过程中，记录所有窗口的长度，并返回最大值
+
+```javascript
+
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var lengthOfLongestSubstring = function(s) {
+    let map = new Map()
+    let max = 0
+
+    // i 是最长子串下标的位置，j是当前循环下标
+    for(let i=0, j=0; j<s.length; j++){
+        if(map.has(s[j])){
+            // 当前字符存在字典内，则更新 i 的起始
+            // i 的位置很重要，一定要是 字典内相同字符位置的下一位
+            i = Math.max(map.get(s[j]) + 1, i)
+        }
+        // 最长值就是当前下标 j 减去子串起始下标 i 再加上 1
+        // 并与当前缓存的 max 取最大值 
+        max = Math.max(max, j-i+1)
+        // 存入当前字符和对应的下标
+        map.set(s[j], j)
+    }
+
+    return max
+};
+
+// console.log(lengthOfLongestSubstring('abcabcbb'));
+// console.log(lengthOfLongestSubstring('bbbbb'));
+// console.log(lengthOfLongestSubstring('pwwkew'));
+// console.log(lengthOfLongestSubstring("dvdf"));
+
+console.log(lengthOfLongestSubstring("abba"));
+
+// console.log(lengthOfLongestSubstring('   '));
+// console.log(lengthOfLongestSubstring('  fs23d'));
+
+```
+
+```python
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        # 子串初始位置指针
+        point = 0
+        # 子串最长数
+        max_len = 0
+        # 字典
+        temp_dict = {}
+
+        for index, value in enumerate(s):
+            if value in temp_dict:
+                # 更新指针
+                point = max(temp_dict[value] + 1, point)
+
+            temp_dict[value] = index
+            max_len = max(index - point + 1, max_len)
+        
+        return max_len
+                
+        
+
+sss = Solution()
+
+print(sss.lengthOfLongestSubstring('abcabcbb'))
+```
