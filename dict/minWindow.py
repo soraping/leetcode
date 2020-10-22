@@ -41,6 +41,8 @@ class Solution:
                 
                 # 记录当前窗口位置
                 res = max(j - i, res[1] - res[0])
+                # 切片，前闭后开
+                print(s[res[0]:res[1]+1])
 
         return '' if res[1] > len(s) else s[res[0]:res[1]+1]
 
