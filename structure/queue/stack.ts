@@ -1,18 +1,11 @@
-class Stack<T> {
-
-    /**
-     * 存储元素
-     */
-    private _items: T[]
-
-    /**
-     * 长度
-     */
-    private _count: number
+import { A } from './a'
+/**
+ * 栈实现
+ */
+class Stack<T> extends A<T> {
 
     constructor() {
-        this._items = []
-        this._count = 0
+        super()
     }
 
     /**
@@ -47,13 +40,6 @@ class Stack<T> {
     }
 
     /**
-     * 判断栈是否为空
-     */
-    isEmpty(): boolean{
-        return this.size == 0
-    }
-
-    /**
      * 清空栈
      * 遵循 LIFO 原则，逐个出栈
      */
@@ -63,21 +49,6 @@ class Stack<T> {
         }
     }
 
-    /**
-     * 返回栈的长度
-     */
-    get size(): number {
-        return this._count
-    }
-
-    toString(){
-        if (this.isEmpty()) return ''
-        let objString = `${this._items[0]}`
-        for (let i = 1; i < this._count; i++){
-            objString += `, ${this._items[i]}`
-        }
-        return objString
-    }
 }
 
 let s = new Stack<number>()
