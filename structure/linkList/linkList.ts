@@ -1,15 +1,29 @@
-import { ILinkList} from './types'
+export interface ILinkList<T, R> {
+    push(value: T): void;
+    insert(value: T, position: number): void;
+    getElementAt(position: number): R;
+    indexOf(value: T): number;
+    removeAt(position: number): void;
+    remove(position: number): void;
+    isEmpty(): boolean;
+    size: number;
+    getHead(): R;
+    toString(): string;
+}
 
-class Node<T>{
-    constructor(public element: T, public next?: Node<T>){}
+/**
+ * 节点
+ */
+export class NodeBase<T>{
+    constructor(public element: T, public next?: NodeBase<T>){}
 }
 
 /**
  * 链表实现
  */
-class LinkList<T> implements ILinkList<T, Node<T>> {
+export class LinkList<T> implements ILinkList<T, NodeBase<T>> {
 
-    constructor(private count: number = 0, private head?: Node<T>){
+    constructor(protected count: number = 0, protected head?: NodeBase<T>){
         
     }
 
@@ -18,9 +32,9 @@ class LinkList<T> implements ILinkList<T, Node<T>> {
      * @param element 
      */
     push(element: T){
-        let node = new Node<T>(element)
+        let node = new NodeBase<T>(element)
         // 指针
-        let point: Node<T>
+        let point: NodeBase<T>
 
         // 链表首元素
         if(this.head == null){
@@ -51,9 +65,8 @@ class LinkList<T> implements ILinkList<T, Node<T>> {
             return console.error("该链表为空")
         }
 
-        // 越界检查
-        if(position < 0 || position >= this.size){
-            return console.error("该位置超出链表范围")
+        if(!this.checkPositionOfLinkList(position)){
+            return console.error(`该链表不存在位置 ${position} 的元素`)
         }
 
         // 链表只有一个元素
@@ -93,15 +106,57 @@ class LinkList<T> implements ILinkList<T, Node<T>> {
      * @param position 
      */
     remove(position: number){
+        if(this.isEmpty()) return console.error("该链表为空")
 
+        if(!this.checkPositionOfLinkList(position)){
+            return console.error(`该链表不存在位置 ${position} 的元素`)
+        }
+
+        // 链表只有一个元素
+        if(this.size == 1){
+            this.head = null
+        }
+        
+        // 特殊位置处理
+        if(position == 0){
+            this.head.next = this.head.next.next
+        }else{
+            // 目标节点的上一个节点
+            let preNode = this.getElementAt(position-1)
+            // 越过删除节点
+            preNode.next = preNode.next.next
+        }
+        this.count--
     }
-    
+
     /**
      * 链表任意位置插入节点
      * @param element 
      * @param position 
      */
-    insert(element: T, position: number){}
+    insert(element: T, position: number){
+        if(!this.checkPositionOfLinkList(position)){
+            return console.error(`该链表不存在位置 ${position} 的元素`)
+        }
+
+        let targetNode = new NodeBase(element)
+
+        // 添加在第一个位置
+        if(position == 0){
+            let point = this.head
+            this.head = targetNode
+            this.head.next = point
+        }else{
+            let preNode = this.getElementAt(position - 1)
+            // 原下一个元素
+            let nextNode = preNode.next
+            // 替代新元素
+            preNode.next = targetNode
+            // 将后面的元素接在新元素后
+            preNode.next.next = nextNode
+        }
+
+    }
 
     /**
      * 获取链表任意位置节点
@@ -109,7 +164,7 @@ class LinkList<T> implements ILinkList<T, Node<T>> {
      */
     getElementAt(position: number){
         // 越界处理
-        if(position >= 0 && position < this.size){
+        if(this.checkPositionOfLinkList(position)){
             let point = this.head
             // 只要遍历至所需位置节点即可
             for(let i=0; i < position && point != null; i++){
@@ -136,12 +191,33 @@ class LinkList<T> implements ILinkList<T, Node<T>> {
         return -1
     }
 
+    /**
+     * 链表是否为空
+     */
     isEmpty(){
         return this.head == null
     }
 
+    /**
+     * 链表长度
+     */
     get size(){
         return this.count
+    }
+
+    /**
+     * 返回链表头部元素
+     */
+    getHead(){
+        return this.head
+    }
+
+    /**
+     * 检查目标位置是否在链表范围内
+     * @param position 
+     */
+    protected checkPositionOfLinkList(position: number): boolean{
+        return position >= 0 && position < this.size
     }
 
     toString(){
@@ -167,5 +243,7 @@ linkList.push(4)
 // linkList.removeAt(2)
 
 console.log(linkList.getElementAt(3))
+
+console.log(linkList.insert(12, 2))
 
 console.log(linkList.toString())
