@@ -23,7 +23,7 @@ export class NodeBase<T>{
  */
 export class LinkList<T> implements ILinkList<T, NodeBase<T>> {
 
-    constructor(protected count: number = 0, protected head?: NodeBase<T>){
+    constructor(protected count: number = 0, protected head?: NodeBase<T>, protected tail ?: NodeBase<T>){
         
     }
 
@@ -51,6 +51,9 @@ export class LinkList<T> implements ILinkList<T, NodeBase<T>> {
             }
             // 将新元素追加到最后一个
             point.next = node
+
+            // 链表尾部元素
+            this.tail = node
         }
         // 链表元素加1
         this.count++
@@ -233,17 +236,17 @@ export class LinkList<T> implements ILinkList<T, NodeBase<T>> {
 
 }
 
-let linkList = new LinkList<number>()
-linkList.push(0)
-linkList.push(1)
-linkList.push(2)
-linkList.push(3)
-linkList.push(4)
+// let linkList = new LinkList<number>()
+// linkList.push(0)
+// linkList.push(1)
+// linkList.push(2)
+// linkList.push(3)
+// linkList.push(4)
 
-// linkList.removeAt(2)
+// // linkList.removeAt(2)
 
-console.log(linkList.getElementAt(3))
+// console.log(linkList.getElementAt(3))
 
-console.log(linkList.insert(12, 2))
+// console.log(linkList.insert(12, 2))
 
-console.log(linkList.toString())
+// console.log(linkList.toString())
