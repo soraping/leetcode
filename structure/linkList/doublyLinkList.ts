@@ -27,6 +27,26 @@ class DoublyLinkList<T> extends LinkList<T> {
         super()
     }
 
+    /**
+     * 双向链表新增节点，只要在最后一个节点上做处理，原最后一个节点的 next 和新增节点的 prev 属性
+     * @param element 
+     */
+    push(element: T){
+        let targetNode = new DoublyNode<T>(element)
+        let point: DoublyNode<T>
+
+        if(this.isEmpty()){
+            this.head = targetNode
+            this.tail = targetNode
+        }else{
+            point = this.tail
+            this.tail = targetNode
+            targetNode.prev = point
+            point.next = targetNode
+        }
+        this.count++
+    }
+
     insert(element: T, position: number){
 
         if(!this.checkPositionOfLinkList(position)){

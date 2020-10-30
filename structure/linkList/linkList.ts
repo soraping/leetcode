@@ -23,7 +23,7 @@ export class NodeBase<T>{
  */
 export class LinkList<T> implements ILinkList<T, NodeBase<T>> {
 
-    constructor(protected count: number = 0, protected head?: NodeBase<T>, protected tail ?: NodeBase<T>){
+    constructor(protected count: number = 0, protected head?: NodeBase<T>){
         
     }
 
@@ -52,8 +52,6 @@ export class LinkList<T> implements ILinkList<T, NodeBase<T>> {
             // 将新元素追加到最后一个
             point.next = node
 
-            // 链表尾部元素
-            this.tail = node
         }
         // 链表元素加1
         this.count++
@@ -224,10 +222,20 @@ export class LinkList<T> implements ILinkList<T, NodeBase<T>> {
     }
 
     toString(){
-        if(!this.head) return ''
-        let objString = `${this.head.element}`
-        let point = this.head.next
-        while (point) {
+        // if(!this.head) return ''
+        // let objString = `${this.head.element}`
+        // let point = this.head.next
+        // while (point) {
+        //     objString += `, ${point.element}`
+        //     point = point.next
+        // }
+        // return objString
+
+        if(this.isEmpty()) return ""
+        let point = this.head
+        let objString = `${point.element}`
+        point = point.next
+        for(let i = 1; i < this.size ; i++){
             objString += `, ${point.element}`
             point = point.next
         }
