@@ -1,0 +1,121 @@
+type TKey = string | number
+
+/**
+ * 散列表类型
+ */
+type TMapItem<T> = { [key: number]: ValuePair<T> }
+
+interface IHashMap<T> {
+    put(key: TKey, value:T): void;
+    remove(key: TKey): void;
+    get(key: TKey): void;
+    hashCode(key: TKey): number;
+}
+
+class ValuePair<T>{
+    constructor(public key: TKey, public value: T){}
+    toString(){
+        return `[${this.key}: ${this.value}]`
+    }
+}
+
+class HashMap<T> implements IHashMap<T> {
+    constructor(private table: TMapItem<T> = {}){}
+
+    /**
+     * 想散列表新增值，也可以更新值
+     * @param key 
+     * @param value 
+     */
+    put(key: TKey, value: T){
+        if(key == '' || key == null || value == null) return console.error('put 方法参数异常')
+        let code = this.hashCode(key)
+        this.table[code] = new ValuePair<T>(key, value)
+    }
+
+    /**
+     * 移除散列表对应的值
+     * @param key 
+     */
+    remove(key: TKey){
+        if(key == "" || key == null) return console.error('remove 方法参数异常')
+        let hashCode = this.hashCode(key)
+        if(this.table[hashCode]){
+            delete this.table[hashCode]
+        }else{
+            console.error(`列表中不存在键值 ${key}`)
+        }
+    }
+
+    /**
+     * 获取散列表中对应的值
+     * @param key 
+     */
+    get(key: TKey){
+        if(key == "" || key == null) return console.error('get 方法参数异常')
+        let valuePair = this.table[this.hashCode(key)]
+        return valuePair == null ? console.error(`没有查询到键值 ${key}`) : valuePair.value
+    }
+
+    /**
+     * 散列函数
+     * 将每个键值中的每个字母的 ASCII 值相加
+     * @param key 
+     */
+    private loseloseHashCode(key: TKey): number{
+        // 如果已经是数字了，直接返回
+        if(typeof key === 'number'){
+            return key
+        }
+
+        if(typeof key != 'string'){
+            key = JSON.stringify(key)
+        }
+
+        let hash = 0
+        for (let i = 0; i < key.length; i++) {
+            // 指定位置的字符的 Unicode 编码
+            hash += key.charCodeAt(i)
+        }
+
+        // 可以规避操作数超过数值变量最大表示范围的 风险
+        return hash % 37
+    }
+
+    /**
+     * 获取
+     * @param key 
+     */
+    hashCode(key: TKey): number{
+        return this.loseloseHashCode(key)
+    }
+
+    /**
+     * 散列表是否为空
+     */
+    isEmpty(){
+        let keys = Object.keys(this.table)
+        return keys.length == 0
+    }
+
+    toString(){
+        if(this.isEmpty()) return ""
+        let keys = Object.keys(this.table)
+        let objStr = `{ ${keys[0]} => ${this.table[keys[0]]} }`
+        for (let i = 1; i < keys.length; i++) {
+            objStr += `\n{ ${keys[i]} => ${this.table[keys[i]]} }`
+        }
+        return objStr
+    }
+
+}
+
+let hash = new HashMap<string | number>()
+hash.put("zhangsan", 1)
+hash.put("lisi", 2)
+hash.put('wanger', 3)
+hash.put("zhangsan", 11)
+
+// hash.remove("zhangsan")
+
+console.log(hash.toString())
