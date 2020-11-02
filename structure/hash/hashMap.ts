@@ -83,6 +83,32 @@ class HashMap<T> implements IHashMap<T> {
     }
 
     /**
+     * 这并不是最好的散列函数，但这是最受社区推崇的散列函数之一
+     * @param key 
+     */
+    private djb2HashCode(key: TKey){
+        if(typeof key === 'number'){
+            return key
+        }
+
+        if(typeof key != 'string'){
+            key = JSON.stringify(key)
+        }
+
+        // 初始化一个 hash 变量并赋值 为一个质数，大多数实现都是使用 5381
+        let hash = 5381;
+
+        for (let i = 0; i < key.length; i++) {
+            // 将 hash 与 33 相乘，并和当前迭代到的字符的 ASCII 码值相加
+            hash = (hash * 33) + key.charCodeAt(i)
+        }
+
+        // 使用相加的和与另一个随机质数相除的余数
+        // 余数会有三位数，这个散列表可能会有 1000
+        return hash % 1013;
+    }
+
+    /**
      * 获取
      * @param key 
      */
