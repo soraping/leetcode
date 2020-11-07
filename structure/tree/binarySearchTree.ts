@@ -76,8 +76,30 @@ class BinarySearchTree<T> implements IBinarySearchTree<T> {
         return a < b ? Compare.LESS_THEN : Compare.BIG_THEN
     }
 
-    // search(key: T){}
-    // remove(){}
+    /**
+     * 指定搜索
+     * @param key 
+     */
+    search(key: T): TreeNode<T>{
+        return this.searchNode(this.root, key)
+    }
+
+    private searchNode(node: TreeNode<T>, key: T) : TreeNode<T>{
+        if (node == null) return null
+    }
+
+    /**
+     * 删除指定节点
+     * @param key 
+     */
+    remove(key: T){
+        this.root = this.removeNode(this.root, key)
+    }
+
+    private removeNode(node: TreeNode<T>, key: T): TreeNode<T>{
+        if(node == null) return null
+
+    }
 
     /**
      * 中序遍历
