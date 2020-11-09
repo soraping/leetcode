@@ -1,5 +1,7 @@
 interface ITree<T> {
     insert(key: T): void;
+    min(): TreeNode<T>;
+    max(): TreeNode<T>;
     search(key: T): TreeNode<T>;
     remove(key: T): void;
     // 中序遍历
@@ -77,7 +79,41 @@ class BinarySearchTree<T> implements IBinarySearchTree<T> {
     }
 
     /**
+     * 返回该树最小节点
+     */
+    min(){
+        return this.minNode(this.root)
+    }
+
+    private minNode(node: TreeNode<T>): TreeNode<T>{
+        // 定义指针，从树顶部开始遍历，只遍历左边的节点
+        let point = node
+        while (point != null && point.left != null) {
+            point = point.left
+        }
+        return point
+    }
+
+    /**
+     * 该树最大的节点
+     */
+    max(){
+        return this.maxNode(this.root)
+    }
+
+    private maxNode(node: TreeNode<T>): TreeNode<T>{
+        // 定义指针，遍历时，只向该节点右子节点移动
+        let point = node
+        while (point != null && point.rigth != null) {
+            point = point.rigth
+        }
+        return point
+    }
+
+    /**
      * 指定搜索
+     * 查询到节点，就将这个节点返回
+     * 如果没有查到，则返回null
      * @param key 
      */
     search(key: T): TreeNode<T>{
@@ -86,10 +122,20 @@ class BinarySearchTree<T> implements IBinarySearchTree<T> {
 
     private searchNode(node: TreeNode<T>, key: T) : TreeNode<T>{
         if (node == null) return null
+        // 判断当前节点与目标节点的大小，即判断目标节点可能存在的位置，是左边还是右边
+        if(this.compare(key, node.key) == Compare.LESS_THEN){
+            return this.searchNode(node.left, key)
+        }else if(this.compare(key, node.key) == Compare.BIG_THEN){
+            return this.searchNode(node.rigth, key)
+        }else{
+            return node
+        }
+
     }
 
     /**
      * 删除指定节点
+     * 先确定节点位置，在处理节点上下类似链表操作
      * @param key 
      */
     remove(key: T){
@@ -98,6 +144,44 @@ class BinarySearchTree<T> implements IBinarySearchTree<T> {
 
     private removeNode(node: TreeNode<T>, key: T): TreeNode<T>{
         if(node == null) return null
+
+        // 先确定目标节点在树中的位置
+        if(this.compare(key, node.key) == Compare.LESS_THEN){
+            this.removeNode(node.left, key)
+        }else if(this.compare(key, node.key) == Compare.BIG_THEN){
+            this.removeNode(node.rigth, key)
+        }else{
+            // 当遍历到该节点时
+
+            // 情况一，这个节点没有左右节点，直接将这个节点置为 null
+            if(node.left == null && node.rigth == null){
+                node = null
+                return node
+            }
+
+            // 情况二，如果该节点只有一侧的子节点
+            // 并将该节点重新赋值子节点的引用
+            // 类似链表的删除节点
+            if(node.left == null){
+                node = node.rigth
+                return node
+            }
+            if(node.rigth == null){
+                node = node.left
+                return node
+            }
+
+            // 情况三，该节点有左右两侧节点
+            // 分析：一个节点的左右两个节点，右侧节点的子枝叶中最小值肯定比左侧任何节点的值要大
+            // 1，先找到该节点右侧子枝叶中最小节点
+            // 2，将这个最小节点的值去替换待删除的节点
+            // 3，将这个最小节点移除
+            // 4，将这个最小节点的父级节点引用清除
+            let rightMin = this.minNode(node.rigth)
+            node.key = rightMin.key
+            node.rigth = this.removeNode(node.rigth, rightMin.key)
+            return node
+        }
 
     }
 
@@ -178,3 +262,9 @@ tree.insert(25);
 tree.insert(6);
 
 tree.postOrderTraverse(console.log)
+
+console.log('min', tree.min())
+console.log('max', tree.max())
+
+console.log(tree.search(20))
+console.log(tree.remove(20))
