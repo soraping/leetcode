@@ -1,6 +1,4 @@
-interface IBases<T> {
-    _items: T[];
-    _count: number;
+interface IBases{
 
     clear(): void;
     isEmpty(): boolean;
@@ -8,13 +6,13 @@ interface IBases<T> {
     size: number;
 }
 
-export interface IQueue<T> extends IBases<T> {
+export interface IQueue<T> extends IBases{
     peek(): T;
     dequeue(): T;
     enqueue(item: T): void;
 }
 
-export interface IDeque<T> extends IBases<T> {
+export interface IDeque<T> extends IBases{
     addFront(item: T): void;
     addBack(item: T): void;
     removeFront(): T;

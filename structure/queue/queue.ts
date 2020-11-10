@@ -4,7 +4,7 @@ import { IQueue } from './types'
 /**
  * 队列
  */
-class Queue<T> extends A<T> implements IQueue<T>{
+export class Queue<T> extends A<T> implements IQueue<T>{
 
     constructor(){
         super()
@@ -51,18 +51,18 @@ class Queue<T> extends A<T> implements IQueue<T>{
 
 }
 
-let q = new Queue<number>()
+// let q = new Queue<number>()
 
-q.enqueue(1)
-q.enqueue(2)
-q.enqueue(3)
+// q.enqueue(1)
+// q.enqueue(2)
+// q.enqueue(3)
 
-console.log(q.peek())
+// console.log(q.peek())
 
-console.log(q)
+// console.log(q)
 
-q.dequeue()
+// q.dequeue()
 
-console.log(q)
+// console.log(q)
 
-console.log(q.toString())
+// console.log(q.toString())

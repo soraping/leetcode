@@ -3,12 +3,12 @@ export abstract class A<T> {
     /**
      * 栈，队列的数组长度
      */
-    _count: number
+    protected _count: number
 
     /**
      * 模拟队列数组
      */
-    _items: T[]
+    protected _items: T[]
 
     constructor(){
         this._items = []
