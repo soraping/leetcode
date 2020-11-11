@@ -39,6 +39,7 @@ const bfs = (root) => {
         let temp = queue.shift()
         console.log(temp.val)
         temp.children.forEach(child => queue.push(child))
+        console.log('queue', JSON.stringify(queue))
     }
 }
 
