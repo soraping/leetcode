@@ -24,7 +24,7 @@ enum Compare {
  * 二叉树节点
  */
 export class BinarySearchTreeNode<T> extends TreeNode<T> {
-    constructor(public key: T, public left?: BinarySearchTreeNode<T>, public rigth?: BinarySearchTreeNode<T>){
+    constructor(public key: T, public left?: BinarySearchTreeNode<T>, public right?: BinarySearchTreeNode<T>){
         super(key)
     }
 }
@@ -59,10 +59,10 @@ export class BinarySearchTree<T> implements IBinarySearchTree<T> {
                 this.insertNode(node.left, key)
             }
         }else {
-            if(node.rigth == null){
-                node.rigth = new TreeNode(key)
+            if(node.right == null){
+                node.right = new TreeNode(key)
             }else{
-                this.insertNode(node.rigth, key)
+                this.insertNode(node.right, key)
             }
         }
 
@@ -99,8 +99,8 @@ export class BinarySearchTree<T> implements IBinarySearchTree<T> {
     private maxNode(node: BinarySearchTreeNode<T>): BinarySearchTreeNode<T>{
         // 定义指针，遍历时，只向该节点右子节点移动
         let point = node
-        while (point != null && point.rigth != null) {
-            point = point.rigth
+        while (point != null && point.right != null) {
+            point = point.right
         }
         return point
     }
@@ -121,7 +121,7 @@ export class BinarySearchTree<T> implements IBinarySearchTree<T> {
         if(this.compare(key, node.key) == Compare.LESS_THEN){
             return this.searchNode(node.left, key)
         }else if(this.compare(key, node.key) == Compare.BIG_THEN){
-            return this.searchNode(node.rigth, key)
+            return this.searchNode(node.right, key)
         }else if(this.compare(key, node.key) == Compare.EQUAL){
             return node
         }
@@ -145,12 +145,12 @@ export class BinarySearchTree<T> implements IBinarySearchTree<T> {
         if(this.compare(key, node.key) == Compare.LESS_THEN){
             this.removeNode(node.left, key)
         }else if(this.compare(key, node.key) == Compare.BIG_THEN){
-            this.removeNode(node.rigth, key)
+            this.removeNode(node.right, key)
         }else if(this.compare(node.key, key) == Compare.EQUAL){
             // 当遍历到该节点时
 
             // 情况一，这个节点没有左右节点，直接将这个节点置为 null
-            if(node.left == null && node.rigth == null){
+            if(node.left == null && node.right == null){
                 node = null
                 return node
             }
@@ -159,10 +159,10 @@ export class BinarySearchTree<T> implements IBinarySearchTree<T> {
             // 并将该节点重新赋值子节点的引用
             // 类似链表的删除节点
             if(node.left == null){
-                node = node.rigth
+                node = node.right
                 return node
             }
-            if(node.rigth == null){
+            if(node.right == null){
                 node = node.left
                 return node
             }
@@ -173,9 +173,9 @@ export class BinarySearchTree<T> implements IBinarySearchTree<T> {
             // 2，将这个最小节点的值去替换待删除的节点
             // 3，将这个最小节点移除
             // 4，将这个最小节点的父级节点引用清除
-            let rightMin = this.minNode(node.rigth)
+            let rightMin = this.minNode(node.right)
             node.key = rightMin.key
-            node.rigth = this.removeNode(node.rigth, rightMin.key)
+            node.right = this.removeNode(node.right, rightMin.key)
             return node
         }
 
@@ -201,7 +201,7 @@ export class BinarySearchTree<T> implements IBinarySearchTree<T> {
             // console.log('node =>', node)
             cb(node.key)
             // 再出大于的
-            this.inOrderTraverseNode(node.rigth, cb)
+            this.inOrderTraverseNode(node.right, cb)
         }
     }
 
@@ -218,7 +218,7 @@ export class BinarySearchTree<T> implements IBinarySearchTree<T> {
         if(node != null){
             cb(node.key)
             this.preOrderTraverseNode(node.left, cb)
-            this.preOrderTraverseNode(node.rigth, cb)
+            this.preOrderTraverseNode(node.right, cb)
         }
     }
 
@@ -235,7 +235,7 @@ export class BinarySearchTree<T> implements IBinarySearchTree<T> {
     private postOrderTraverseNode(node: BinarySearchTreeNode<T>, cb: Function){
         if(node != null){
             this.postOrderTraverseNode(node.left, cb)
-            this.postOrderTraverseNode(node.rigth, cb)
+            this.postOrderTraverseNode(node.right, cb)
             cb(node.key)
         }
     }

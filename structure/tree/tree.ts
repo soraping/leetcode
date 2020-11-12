@@ -55,12 +55,12 @@ export class Tree<T> implements ITree<T> {
     }
 }
 
-let tree = new Tree()
+// let tree = new Tree()
 
-tree.insert(2)
-console.log(tree.search(2))
+// tree.insert(2)
+// console.log(tree.search(2))
 
-tree.insert(12, tree.search(2))
+// tree.insert(12, tree.search(2))
 
-console.log(tree.search(2))
+// console.log(tree.search(2))
 
